@@ -2,6 +2,11 @@ import React, { useState, useRef, useCallback } from 'react';
 import './App.css';
 import { HexColorPicker } from "react-colorful";
 
+function autoGrow(element) {
+    element.style.height = "5px";  // Reset the height
+    element.style.height = (element.scrollHeight) + "px";
+}
+
 function App() {
     // React State
     const [circles, setCircles] = useState([]);
@@ -20,6 +25,9 @@ function App() {
     const [tempSquareCost, setTempSquareCost] = useState(10); // set initial cost to 10
     const [showTextbox, setShowTextbox] = useState(false);
     const [textboxPosition, setTextboxPosition] = useState({ x: 0, y: 0 });
+
+
+    const [selectedComment, setSelectedComment] = useState(null);
 
 
 
@@ -284,6 +292,15 @@ const handleSaveComment = useCallback((circleIndex, textboxIndex) => {
         setStars(prevStars => prevStars + 10); // Increase stars for comment
     }
 }, [circles]);
+
+
+const handleCommentClick = useCallback((circleIndex, commentIndex) => {
+    setSelectedComment({
+        circleIndex: circleIndex,
+        commentIndex: commentIndex
+    });
+}, []);
+
 
     
   const handleTextboxChange = useCallback((e, circleIndex, textboxIndex) => {
@@ -567,6 +584,7 @@ const createShape = () => {
         onMouseMove={moveSquare}
     >
                 <textarea
+                
                     className="square-textbox"
                     placeholder="Enter text"
                     value={square.text}
@@ -616,8 +634,15 @@ const createShape = () => {
                                         )}
                                         <div className="commentsWrapper">
                                         {(circle.comments[idx] || []).map((comment, cidx) => (
-                                            <div key={cidx} className="commentBox">{comment}</div>
+                                            <div 
+                                                key={cidx} 
+                                                className={`commentBox ${selectedComment && selectedComment.circleIndex === index && selectedComment.commentIndex === cidx ? 'selected' : ''}`} 
+                                                onClick={() => handleCommentClick(index, cidx)}
+                                            >
+                                                {comment}
+                                            </div>
                                         ))}
+
                                         </div>
                                     </div>
                                       {idx === 2 && <div className="PriceCircle gridPrice"></div>}

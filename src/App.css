@@ -240,6 +240,12 @@ li {
   color: rgb(240, 240, 240);
 }
 
+.commentBox.selected {
+  color: white;
+}
+
+
+
 .commentsWrapper {
   display: flex;
   flex-direction: column;
@@ -344,6 +350,14 @@ width: 110%;
   margin-bottom: 7px;
 }
 
+textarea:focus {
+  outline: none;
+}
+textarea {
+  overflow: hidden;
+  max-height: 100px;
+  resize: none;  /* prevent user from manually resizing */
+}
 
 
 
