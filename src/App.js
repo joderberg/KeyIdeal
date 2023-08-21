@@ -1,11 +1,9 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useContext } from 'react';
 import './App.css';
 import { HexColorPicker } from "react-colorful";
 
-function autoGrow(element) {
-    element.style.height = "5px";  // Reset the height
-    element.style.height = (element.scrollHeight) + "px";
-}
+
+
 
 function App() {
     // React State
@@ -26,12 +24,46 @@ function App() {
     const [showTextbox, setShowTextbox] = useState(false);
     const [textboxPosition, setTextboxPosition] = useState({ x: 0, y: 0 });
 
+     const [answers, setAnswers] = useState({}); // Store answers with commentId as key
+
 
     const [selectedComment, setSelectedComment] = useState(null);
+    const [selectedCommentId, setSelectedCommentId] = useState(null);
+    const [selectedReplyId, setSelectedReplyId] = useState(null);
+
+
+// Functions
+
+const YourContext = React.createContext();
+
+
+const saveAnswer = (commentId) => {
+    // Logic to save the answer for the given commentId
+};
+
+
+const handleCommentClick = useCallback((circleIndex, commentIndex, commentId) => {
+    if (commentId !== undefined) {
+        setSelectedCommentId(commentId);
+    } else {
+        setSelectedComment({
+            circleIndex: circleIndex,
+            commentIndex: commentIndex
+        });
+    }
+}, []);
 
 
 
 
+const handleAnswerChange = (commentId, answer) => {
+    setAnswers(prevAnswers => ({
+        ...prevAnswers,
+        [commentId]: answer
+    }));
+};
+
+const comments = useContext(YourContext);
 
     
     // Refs
@@ -294,12 +326,7 @@ const handleSaveComment = useCallback((circleIndex, textboxIndex) => {
 }, [circles]);
 
 
-const handleCommentClick = useCallback((circleIndex, commentIndex) => {
-    setSelectedComment({
-        circleIndex: circleIndex,
-        commentIndex: commentIndex
-    });
-}, []);
+
 
 
     
@@ -334,6 +361,8 @@ const handleCommentClick = useCallback((circleIndex, commentIndex) => {
 
 
 
+//NEW
+
 
 
 
@@ -353,8 +382,12 @@ const handleCommentClick = useCallback((circleIndex, commentIndex) => {
         showGrid: false,
         textValues: Array(9).fill(''),
         activeTextbox: [6],
-        comments: Array(9).fill([]) // Initialiserar en 2D-array för kommentarer
-    };
+        comments: Array(9).fill([{ 
+            id: Date.now(),  // Using Date.now() for simplicity, but you may want a more robust mechanism.
+            text: "",
+            replies: [] 
+        }])
+            };
 }, []);
 
 
@@ -444,12 +477,7 @@ const createShape = () => {
 
 
 
-
-
-
-
-
-  return (
+return (
     <div className="App" onMouseDown={startDrag} onMouseUp={endDrag} onMouseMove={move}>
         <button className="CreateButton" onClick={addCircle}>SKAPA</button>
         <button className="CreateButton" style={{left: 'calc(20% + 20px)'}} onClick={toggleModal}>SYMBOL</button>
@@ -457,57 +485,52 @@ const createShape = () => {
 
         {showModal && (
             <div className="backdrop" onClick={outsideClick}>
-<div 
-    className="modal" 
-    onMouseDown={startDragModal}
-    onMouseMove={moveModal}
-    onMouseUp={endDragModal}
-    style={{left: `${modalPosition.x}px`, top: `${modalPosition.y}px`}}
->
+                <div 
+                    className="modal" 
+                    onMouseDown={startDragModal}
+                    onMouseMove={moveModal}
+                    onMouseUp={endDragModal}
+                    style={{left: `${modalPosition.x}px`, top: `${modalPosition.y}px`}}
+                >
+
                     {currentStep > 1 && (
                         <button onClick={() => setCurrentStep(currentStep - 1)} style={{ color: 'blue', position: 'absolute', top: '10px', left: '50px' }}>←</button>
                     )}
 
                     {currentStep === 1 && (
                         <div className="step">
-<div className="shapes-selection">
-    <div 
-        className={`shape-icon triangle ${selectedShape === 'triangle' ? 'selected' : ''}`} 
-        onClick={() => setSelectedShape('triangle')}
-    ></div>
-    <div 
-        className={`shape-icon square ${selectedShape === 'square' ? 'selected' : ''}`} 
-        onClick={() => setSelectedShape('square')}
-    ></div>
-
-    <div 
-    className={`shape-icon pentagon ${selectedShape === 'pentagon' ? 'selected' : ''}`} 
-    onClick={() => setSelectedShape('pentagon')}
-></div>
-
-
-    <div 
-        className={`shape-icon hexagon ${selectedShape === 'hexagon' ? 'selected' : ''}`} 
-        onClick={() => setSelectedShape('hexagon')}
-    ></div>
-        <div 
-        className={`shape-icon circle-icon ${selectedShape === 'circle' ? 'selected' : ''}`} 
-        onClick={() => setSelectedShape('circle')}
-    ></div>
-
-
-
+                            <div className="shapes-selection">
+                                <div 
+                                    className={`shape-icon triangle ${selectedShape === 'triangle' ? 'selected' : ''}`} 
+                                    onClick={() => setSelectedShape('triangle')}
+                                ></div>
+                                <div 
+                                    className={`shape-icon square ${selectedShape === 'square' ? 'selected' : ''}`} 
+                                    onClick={() => setSelectedShape('square')}
+                                ></div>
+                                <div 
+                                    className={`shape-icon pentagon ${selectedShape === 'pentagon' ? 'selected' : ''}`} 
+                                    onClick={() => setSelectedShape('pentagon')}
+                                ></div>
+                                <div 
+                                    className={`shape-icon hexagon ${selectedShape === 'hexagon' ? 'selected' : ''}`} 
+                                    onClick={() => setSelectedShape('hexagon')}
+                                ></div>
+                                <div 
+                                    className={`shape-icon circle-icon ${selectedShape === 'circle' ? 'selected' : ''}`} 
+                                    onClick={() => setSelectedShape('circle')}
+                                ></div>
                             </div>
                             <button 
-        className={`next-button ${selectedShape ? 'selected' : ''}`} 
-        onClick={() => setCurrentStep(2)}
-      >
-        Next
-      </button>
-    </div>
+                                className={`next-button ${selectedShape ? 'selected' : ''}`} 
+                                onClick={() => setCurrentStep(2)}
+                            >
+                                Next
+                            </button>
+                        </div>
                     )}
 
-{currentStep === 2 && (
+                    {currentStep === 2 && (
                         <div className="step">
                             <div 
                                 onMouseDown={(e) => e.stopPropagation()}
@@ -519,22 +542,21 @@ const createShape = () => {
                             >
                                 <HexColorPicker color={starColor} onChange={setStarColor} />
                             </div>
-
                             <button onClick={() => setCurrentStep(3)}>Next</button>
                         </div>
                     )}
 
-{currentStep === 3 && (
-            <div className="step">
-                <div className={`selected-shape ${selectedShape}`} style={{ 
-                    width: `${tempSquareSize}px`, 
-                    height: `${tempSquareSize}px`, 
-                    backgroundColor: starColor,
-                    margin: '10px auto',
-                    color: 'white',
-                    display: 'block'
-                }}></div>
-                            
+                    {currentStep === 3 && (
+                        <div className="step">
+                            <div className={`selected-shape ${selectedShape}`} style={{ 
+                                width: `${tempSquareSize}px`, 
+                                height: `${tempSquareSize}px`, 
+                                backgroundColor: starColor,
+                                margin: '10px auto',
+                                color: 'white',
+                                display: 'block'
+                            }}></div>
+
                             <input 
                                 type="range" 
                                 value={tempSquareCost} 
@@ -542,121 +564,145 @@ const createShape = () => {
                                 min="10" max="100000" 
                                 onMouseDown={(e) => e.stopPropagation()} 
                             />
-
                             <div style={{color: 'white'}}>Cost: {tempSquareCost} Stars</div>
                             <button style={{width: '100%'}} onClick={() => setCurrentStep(4)}>Next</button>
                         </div>
                     )}
-                            {currentStep === 4 && (
-                                <div className="step">
-                                    <textarea 
-                                        placeholder="Enter something..." 
-                                    />
-                                    <button onClick={createShape}>Starta</button>
-                                </div>
-                            )}
 
+{currentStep === 4 && (
+                            <div className="step">
+                                <textarea placeholder="Enter something..." />
+                                <button onClick={createShape}>Starta</button>
+                            </div>
+                        )}
 
-
-                    <button onClick={toggleModal} style={{ color: 'red', position: 'absolute', top: '10px', left: '10px' }}>✖</button>
+                        <button onClick={toggleModal} style={{ color: 'red', position: 'absolute', top: '10px', left: '10px' }}>✖</button>
+                    </div>
                 </div>
-            </div>
-        )}
+            )}
 
-
-
-{createdSquares.map((square, index) => (
-    <div
-        key={index}
-        className={`createdSquare ${square.shapeType}`}  // Use shape type here
-        style={{ 
-            backgroundColor: square.color,
-            border: `1px solid ${square.borderColor}`,
-            width: `${square.size}px`,
-            height: `${square.size}px`,
-            position: 'absolute',
-            left: square.x,
-            top: square.y,
-            cursor: 'pointer'
-        }}
-        onMouseDown={(e) => startDragSquare(e, index)}
-        onMouseUp={endDragSquare}
-        onMouseMove={moveSquare}
-    >
-                <textarea
-                
-                    className="square-textbox"
-                    placeholder="Enter text"
-                    value={square.text}
-                    onChange={(e) => handleSquareTextChange(e, index)}
-                />
-                <button onClick={() => handleSaveSquareComment(index)}>Save</button>
-                <div className="square-comments">
-                    {square.comments.map((comment, cidx) => (
-                        <div key={cidx}>{comment}</div>
-                    ))}
+            {createdSquares.map((square, index) => (
+                <div
+                    key={index}
+                    className={`createdSquare ${square.shapeType}`}  // Use shape type here
+                    style={{ 
+                        backgroundColor: square.color,
+                        border: `1px solid ${square.borderColor}`,
+                        width: `${square.size}px`,
+                        height: `${square.size}px`,
+                        position: 'absolute',
+                        left: square.x,
+                        top: square.y,
+                        cursor: 'pointer'
+                    }}
+                    onMouseDown={(e) => startDragSquare(e, index)}
+                    onMouseUp={endDragSquare}
+                    onMouseMove={moveSquare}
+                >
+                    <textarea
+                        className="square-textbox"
+                        placeholder="Enter text"
+                        value={square.text}
+                        onChange={(e) => handleSquareTextChange(e, index)}
+                    />
+                    <button onClick={() => handleSaveSquareComment(index)}>Save</button>
+                    <div className="square-comments">
+                        {square.comments.map((comment, cidx) => (
+                            <div key={cidx}>{comment}</div>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        ))}
+            ))}
 
-        {circles.map((circle, index) => (
-            <div
-                key={index}
-                className="Circle"
-                style={{
-                    left: circle.x - circle.radius,
-                    top: circle.y - circle.radius,
-                    width: circle.radius * 5,
-                    height: circle.radius * 5
-                }}
-                onMouseDown={(e) => startDragCircle(e, index)}
-                onClick={() => toggleGrid(index)}
-            >
-                
-                  <div className="circle-content">
-                      <div className="innerCircle"></div>
-                      {circle.showGrid && (
-                          <div className="grid">
-                              {[...Array(9)].map((_, idx) => (
+            {circles.map((circle, index) => (
+                <div
+                    key={index}
+                    className="Circle"
+                    style={{
+                        left: circle.x - circle.radius,
+                        top: circle.y - circle.radius,
+                        width: circle.radius * 5,
+                        height: circle.radius * 5
+                    }}
+                    onMouseDown={(e) => startDragCircle(e, index)}
+                    onClick={() => toggleGrid(index)}
+                >
+                <div className="circle-content">
+                    <div className="innerCircle"></div>
+                    {circle.showGrid && (
+                        <div className="grid">
+                            {[...Array(9)].map((_, idx) => (
                                 <div key={idx} className="grid-square">
                                     <div className="contentWrapper">
                                         {circle.activeTextbox.includes(idx) && (
-                                        <div className="textboxWrapper">
-                                            <textarea
-                                            className="textbox"
-                                            placeholder="Enter text"
-                                            onChange={(e) => handleTextboxChange(e, index, idx)}
-                                            value={circle.textValues[idx] || ""}
-                                            onClick={(e) => e.stopPropagation()}
-                                            />
-                                            <button className="spara" onClick={(e) => { e.stopPropagation(); setIsClick(false); handleSaveComment(index, idx); }}>Save</button>
-                                        </div>
-                                        )}
-                                        <div className="commentsWrapper">
-                                        {(circle.comments[idx] || []).map((comment, cidx) => (
-                                            <div 
-                                                key={cidx} 
-                                                className={`commentBox ${selectedComment && selectedComment.circleIndex === index && selectedComment.commentIndex === cidx ? 'selected' : ''}`} 
-                                                onClick={() => handleCommentClick(index, cidx)}
-                                            >
-                                                {comment}
+                                            <div className="textboxWrapper">
+                                                <textarea
+                                                    className="textbox"
+                                                    placeholder="Enter text"
+                                                    onChange={(e) => handleTextboxChange(e, index, idx)}
+                                                    value={circle.textValues[idx] || ""}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                                <button className="spara" onClick={(e) => { e.stopPropagation(); setIsClick(false); handleSaveComment(index, idx); }}>Save</button>
                                             </div>
-                                        ))}
+                                        )}
+                    <div className="commentsWrapper">
+                        {(circle.comments[idx] || []).map((comment, cidx) => (
+                            <div 
+                                key={comment.id} 
+                                className={`commentBox ${selectedComment && selectedComment.circleIndex === index && selectedComment.commentIndex === cidx ? 'selected' : ''}`} 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCommentClick(index, cidx, comment.id);
+                                }}
+                            >
+                                {comment.text}
+                                {(comment.id === selectedCommentId) && (
+                                    <>
+                                        <textarea 
+                                            placeholder="Skriv en ny kommentar..."
+                                            value={answers[comment.id] || ''}
+                                            onChange={e => handleAnswerChange(comment.id, e.target.value)}
+                                        ></textarea>
+                                        <button onClick={() => saveAnswer(comment.id)}>Save Answer</button>
+                                    </>
+                                )}
+                                {comment.replies && comment.replies.map(reply => (
+                                    <div 
+                                        key={reply.id}
+                                        className={`reply ${reply.id === selectedReplyId ? 'selected' : ''}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleCommentClick(index, cidx, reply.id);
+                                        }}
+                                    >
+                                        {reply.text}
+                                        {reply.id === selectedReplyId && (
+                                            <>
+                                                <textarea 
+                                                    placeholder="Skriv en ny kommentar..."
+                                                    value={answers[reply.id] || ''}
+                                                    onChange={e => handleAnswerChange(reply.id, e.target.value)}
+                                                ></textarea>
+                                                <button onClick={() => saveAnswer(reply.id)}>Save Answer</button>
+                        </>
+                    )}
+                </div>
+            ))}
+        </div>
+    ))}
+</div>
+</div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        ))}
+    </div>
+);
 
-                                        </div>
-                                    </div>
-                                      {idx === 2 && <div className="PriceCircle gridPrice"></div>}
-                                  </div>
-                                        
-
-                              ))}
-                          </div>
-                      )}
-                  </div>
-              </div>
-          ))}
-      </div>
-    );
-}
+        }
 
 export default App;
