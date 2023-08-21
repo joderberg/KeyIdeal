@@ -219,6 +219,32 @@ li {
 }
 
 /* Comment Styling */
+
+.comment {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  color: #FFF;  /* ensure the text is readable */
+}
+
+.reply {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 5px;
+  margin-left: 20px; /* to give it an indentation look */
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  color: #FFF;  /* ensure the text is readable */
+}
+
+
+.comment.selected {
+  background-color: white;
+}
+
+
+
 .commentList {
   max-height: 70px;
   overflow-y: auto;
@@ -239,6 +265,12 @@ li {
   font-size: 13px;
   color: rgb(240, 240, 240);
 }
+
+.commentBox.selected {
+  color: white;
+}
+
+
 
 .commentsWrapper {
   display: flex;
@@ -344,6 +376,14 @@ width: 110%;
   margin-bottom: 7px;
 }
 
+textarea:focus {
+  outline: none;
+}
+textarea {
+  overflow: hidden;
+  max-height: 100px;
+  resize: none;  /* prevent user from manually resizing */
+}
 
 
 
