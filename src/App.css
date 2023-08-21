@@ -1,38 +1,351 @@
-.App {
-  text-align: center;
+/* CSS Variables */
+:root {
+  --inner-circle-size: 370%;
 }
 
-.App-logo {
-  height: 40vmin;
+/* General Styling */
+body {
+  margin: 0;
+  user-select: none;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: -110px 0;
+  z-index: 4000;
+  height: 180px;
+  background-color: #ffffff;
+}
+
+li {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  z-index: 4000;
+}
+
+/* App Styling */
+.App {
+  width: 1000vw;
+  height: 1000vh;
+  position: relative;
+  cursor: grab;
+  background-color: rgb(11, 11, 11);
+}
+
+/* Circle Styling */
+.Circle {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  border: 7px solid #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.innerCircle {
+  width: var(--inner-circle-size);
+  height: var(--inner-circle-size);
+  background-color: transparent;
+  border: 10px solid #243656ac;
+  border-radius: 50%;
+  position: absolute;
+  top: -21px;
+  left: -20px;
+  animation: rotateCircle 1s linear infinite;
+}
+
+.circle-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes rotateCircle {
+  0% {
+    transform: rotate(0deg);
+    scale: 73%;
+  }
+  50% {
+    scale: 63%;
+  }
+  100% {
+    transform: rotate(560deg);
+    scale: 73%;
+  }
+}
+
+/* Button and Elements Styling */
+.CreateButton, .PriceCircle, .starCount {
+  position: fixed;
+  bottom: 10px;
+  height: 30px;
+  z-index: 1000;
+  color: aliceblue;
+}
+
+.CreateButton {
+  left: 10px;
+  width: 20%;
+  background-color: #333;
+}
+
+.PriceCircle {
+  left: 82%;
+  bottom: 82%;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.starCount {
+  left: calc(40% + 30px);
+  line-height: 30px;
+}
+
+/* Grid Styling */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 5px;
+  position: absolute;
+  top: -187px;
+  left: 30px;
+  transform: translateY(-50%);
+}
+
+.grid-square {
+  width: 100px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.008);
+  position: relative;
+}
+
+.grid-square ::-webkit-scrollbar {
+  display: none;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow-y: auto;
+  height: 100%;
+  gap: 5px;
+}
+
+/* Modal Styling */
+.modal {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  padding-top: 10%;
+  margin-top: -14%;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  pointer-events: all;
+}
+
+.modal > div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+}
+
+.createdSquare.square {
+  border-radius: 5%;
+
+  /* styles for square */
+}
+
+.createdSquare.circle-icon {
+  border-radius: 50%;
+  /* styles for circle */
+}
+
+.createdSquare.triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  /* styles for triangle */
+}
+
+.createdSquare.pentagon {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  /* styles for pentagon */
+}
+
+.createdSquare.hexagon {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* styles for hexagon */
+}
+
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Textbox and Content Wrapper Styling */
+.textbox, .square-textbox {
+  width: 95%;
+  height: 95%;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.014);
+  border: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  resize: none;
+  overflow-y: auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.contentWrapper {
+  position: absolute;
+  top: 0;
+  left: 1px;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  padding: 3px;
+}
+
+/* Comment Styling */
+.commentList {
+  max-height: 70px;
+  overflow-y: auto;
+  font-size: 5;
+}
+
+.commentsContainer, .scrollableContainer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
+}
+
+.commentBox {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  font-size: 13px;
+  color: rgb(240, 240, 240);
+}
+
+.commentsWrapper {
   display: flex;
   flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+}
+
+.square-comments {
+  overflow-y: auto;
+  width: 100%;
+  max-height: calc(100% - 80px);
+}
+
+.square-comments li, .square-comments::-webkit-scrollbar {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+}
+
+.square-comments::-webkit-scrollbar {
+  display: none;
+}
+
+/* Shapes Styling */
+
+.next-button {
+width: 110%;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.shapes-selection {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto 0;
+  gap: 30px;
+  padding-bottom: 20%;
+}
+
+.shape-icon {
+  cursor: pointer;
+  transition: transform 0.2s;
+  height: 50px;
+  background-color: white;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.shape-icon.selected {
+  transform: scale(2);
+  background-color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.triangle {
+  width: 0;
+  height: 0;
+  border-bottom-color: grey;
+  background-color: transparent;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
+  border-bottom: 41.5px solid rgb(151, 151, 151);
+  margin-top: 1.5px;
 }
+
+.square {
+  width: 40px;
+  height: 40px;
+}
+
+.pentagon {
+  background-color: grey;
+  width: 42px;
+  height: 42px;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  cursor: pointer;
+}
+
+.hexagon {
+  width: 42px;
+  height: 45px;
+  position: relative;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.circle-icon {
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+}
+
+.spara {
+  width: 100%;
+  margin-bottom: 7px;
+}
+
+
+
+
+/*Ny cariabel som gör problem mindre och lösningen stor.  New CSS Variables */
+/*Chooser */

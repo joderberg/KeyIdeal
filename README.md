@@ -1,3 +1,22 @@
+
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+
+
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+                              style={{ left: `${50 + idx * 60}px`, top: `${idx * 30}px`, borderLeft: '1px solid' }}
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
